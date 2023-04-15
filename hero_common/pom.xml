@@ -12,6 +12,11 @@
     <artifactId>hero_common</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.0</version>
+        </dependency>
         <!--web起步依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

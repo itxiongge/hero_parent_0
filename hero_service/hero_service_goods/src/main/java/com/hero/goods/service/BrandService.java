@@ -8,6 +8,13 @@ import java.util.Map;
 
 public interface BrandService {
 
+    /**
+     * 根据商品分类名称查询品牌列表
+     * @param categoryName
+     * @return
+     */
+    public List<Map> findListByCategoryName(String categoryName);
+
     /***
      * 查询所有品牌
      * @return
