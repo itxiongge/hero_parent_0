@@ -5,10 +5,15 @@ import com.hero.entity.StatusCode;
 import com.hero.system.service.AdminService;
 import com.hero.system.pojo.Admin;
 import com.github.pagehelper.Page;
+import com.hero.system.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/admin")
@@ -17,6 +22,7 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
     /**
      * 登录
      * @param admin
@@ -25,8 +31,12 @@ public class AdminController {
     @PostMapping("/login")
     public Result login(@RequestBody Admin admin){
         boolean login = adminService.login(admin);
-        if(login){
-            return new Result();
+        if(login){  //如果验证成功
+            Map<String,String> info = new HashMap<>();
+            info.put("username",admin.getLoginName());
+            String token = JwtUtil.createJWT(UUID.randomUUID().toString(), admin.getLoginName(), null);
+            info.put("token",token);
+            return new Result(true, StatusCode.OK,"登录成功",info);
         }else{
             return new Result(false,StatusCode.LOGINERROR,"用户名或密码错误");
         }
