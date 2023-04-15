@@ -13,11 +13,20 @@ spring:
             - Path=/goods/**
           filters:
             - StripPrefix= 1
+            - name: RequestRateLimiter #请求数限流 名字不能随便写
+              args:
+                key-resolver: "#{@ipKeyResolver}"
+                redis-rate-limiter.replenishRate: 100
+                redis-rate-limiter.burstCapacity: 100
         - id: system
           uri: lb://system
           predicates:
             - Path=/system/**
           filters:
             - StripPrefix= 1
+  # 配置Redis 127.0.0.1可以省略配置
+  redis:
+    host: 192.168.200.128
+    port: 6379
 server:
   port: 9101

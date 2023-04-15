@@ -17,7 +17,20 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
-
+    /**
+     * 登录
+     * @param admin
+     * @return
+     */
+    @PostMapping("/login")
+    public Result login(@RequestBody Admin admin){
+        boolean login = adminService.login(admin);
+        if(login){
+            return new Result();
+        }else{
+            return new Result(false,StatusCode.LOGINERROR,"用户名或密码错误");
+        }
+    }
     /**
      * 查询全部数据
      * @return

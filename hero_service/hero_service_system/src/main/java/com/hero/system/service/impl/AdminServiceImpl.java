@@ -6,6 +6,7 @@ import com.hero.system.pojo.Admin;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -18,6 +19,20 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private AdminMapper adminMapper;
 
+    @Override
+    public boolean login(Admin admin) {
+        //根据登录名查询管理员
+        Admin admin1=new Admin();
+        admin1.setLoginName(admin.getLoginName());
+        admin1.setStatus("1");
+        Admin admin2 = adminMapper.selectOne(admin1);//数据库查询出的对象
+        if(admin2==null){
+            return false;
+        }else{
+            //验证密码, Bcrypt为spring的包, 第一个参数为明文密码, 第二个参数为密文密码
+            return BCrypt.checkpw(admin.getPassword(),admin2.getPassword());
+        }
+    }
     /**
      * 查询全部列表
      * @return
@@ -42,8 +57,14 @@ public class AdminServiceImpl implements AdminService {
      * 增加
      * @param admin
      */
+    /**
+     * 增加
+     * @param admin
+     */
     @Override
     public void add(Admin admin){
+        String password = BCrypt.hashpw(admin.getPassword(), BCrypt.gensalt());
+        admin.setPassword(password);
         adminMapper.insert(admin);
     }
 

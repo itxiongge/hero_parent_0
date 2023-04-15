@@ -15,9 +15,8 @@ public class TestBCrypt {
         //2.调用BCrypt接口，对密码加密
         //获取盐
         String gensalt = BCrypt.gensalt();
-
-        //String hashpw = BCrypt.hashpw(pwd, gensalt);
-        //System.out.println("hashpw = " + hashpw);//加密后的
+        String hashpw = BCrypt.hashpw(pwd, gensalt);
+        System.out.println("hashpw = " + hashpw);//加密后的
         //第1次  $2a$10$OBslQe16l7CWM2KfTYGbR.s2Xb/5VbZqcjbhXC1yN2cH9E4NrJSmW
         String hashpwd1 = "$2a$10$OBslQe16l7CWM2KfTYGbR.s2Xb/5VbZqcjbhXC1yN2cH9E4NrJSmW";
         //第2次  $2a$10$d0U8fh7Pj6uclhtoZWyqCOi/DZwagZI6UDySLactGGAh6PgkIT3Zu
