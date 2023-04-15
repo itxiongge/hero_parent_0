@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: sysgateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+        - id: goods
+          uri: lb://goods
+          predicates:
+            - Path=/goods/**
+          filters:
+            - StripPrefix= 1
+        - id: system
+          uri: lb://system
+          predicates:
+            - Path=/system/**
+          filters:
+            - StripPrefix= 1
+server:
+  port: 9101

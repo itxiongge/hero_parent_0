@@ -11,6 +11,9 @@
 
     <groupId>com.hero</groupId>
     <packaging>pom</packaging>
+    <modules>
+        <module>hero_gateway_system</module>
+    </modules>
     <artifactId>hero_gateway</artifactId>
 
 </project>
