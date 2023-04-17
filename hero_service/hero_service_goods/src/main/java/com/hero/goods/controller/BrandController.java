@@ -6,6 +6,7 @@ import com.hero.entity.Result;
 import com.hero.entity.StatusCode;
 import com.hero.goods.pojo.Brand;
 import com.hero.goods.service.BrandService;
+import com.hero.util.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,13 @@ public class BrandController {
 
     @Autowired
     private BrandService brandService;
+    @Autowired
+    private IdWorker idWorker;
 
+    @GetMapping("/createId")
+    public long createId(){
+        return idWorker.nextId();
+    }
     /**
      * 根据分类名称查询品牌列表
      * @param category
