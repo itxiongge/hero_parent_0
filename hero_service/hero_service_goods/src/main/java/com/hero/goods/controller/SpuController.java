@@ -18,6 +18,36 @@ public class SpuController {
 
     @Autowired
     private SpuService spuService;
+    /**
+     * 上架
+     * @param id
+     * @return
+     */
+    @PutMapping("/put/{id}")
+    public Result put(@PathVariable String id){
+        spuService.put(id);
+        return new Result();
+    }
+    /**
+     * 下架
+     * @param id
+     * @return
+     */
+    @PutMapping("/pull/{id}")
+    public Result pull(@PathVariable String id){
+        spuService.pull(id);
+        return new Result();
+    }
+    /**
+     * 审核
+     * @param id
+     * @return
+     */
+    @PutMapping("/audit/{id}")
+    public Result audit(@PathVariable String id){
+        spuService.audit(id);
+        return new Result();
+    }
     /***
      * 新增数据
      * @param goods
