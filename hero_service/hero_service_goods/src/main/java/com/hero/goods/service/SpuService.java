@@ -9,6 +9,16 @@ import java.util.Map;
 
 public interface SpuService {
     /**
+     * 物理删除
+     * @param id
+     */
+    void realDelete(String id);
+    /**
+     * 恢复数据
+     * @param id
+     */
+    void restore(String id);
+    /**
      * 上架商品
      * @param id
      */

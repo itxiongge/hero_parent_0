@@ -36,6 +36,31 @@ public class SpuServiceImpl implements SpuService {
 
     @Autowired
     private CategoryBrandMapper categoryBrandMapper;
+    @Override
+    public void realDelete(String id) {
+        Spu spu = spuMapper.selectByPrimaryKey(id);
+        //检查是否删除的商品
+        if(!spu.getIsDelete().equals("1")){
+            throw new RuntimeException("此商品未删除！");
+        }
+        spuMapper.deleteByPrimaryKey(id);
+
+    }
+    /**
+     * 恢复数据
+     * @param id
+     */
+    @Override
+    public void restore(String id) {
+        Spu spu = spuMapper.selectByPrimaryKey(id);
+        //检查是否删除的商品
+        if(!spu.getIsDelete().equals("1")){
+            throw new RuntimeException("此商品未删除！");
+        }
+        spu.setIsDelete("0");//未删除
+        spu.setStatus("0");//未审核
+        spuMapper.updateByPrimaryKeySelective(spu);
+    }
     /**
      * 上架商品
      * @param id
@@ -221,13 +246,24 @@ public class SpuServiceImpl implements SpuService {
         spuMapper.updateByPrimaryKey(spu);
     }
 
+//    @Override
+//    public void delete(String id){
+//        spuMapper.deleteByPrimaryKey(id);
+//    }
     /**
      * 删除
      * @param id
      */
     @Override
     public void delete(String id){
-        spuMapper.deleteByPrimaryKey(id);
+        Spu spu = spuMapper.selectByPrimaryKey(id);
+        //检查是否下架的商品
+        if(!spu.getIsMarketable().equals("0")){
+            throw new RuntimeException("必须先下架再删除！");
+        }
+        spu.setIsDelete("1");//删除
+        spu.setStatus("0");//未审核
+        spuMapper.updateByPrimaryKeySelective(spu);
     }
 
 
