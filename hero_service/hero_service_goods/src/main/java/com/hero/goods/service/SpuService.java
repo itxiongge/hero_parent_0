@@ -1,5 +1,6 @@
 package com.hero.goods.service;
 
+import com.hero.goods.pojo.Goods;
 import com.hero.goods.pojo.Spu;
 import com.github.pagehelper.Page;
 
@@ -8,6 +9,11 @@ import java.util.Map;
 
 public interface SpuService {
 
+    /***
+     * 新增
+     * @param goods
+     */
+    void add(Goods goods);
     /***
      * 查询所有
      * @return

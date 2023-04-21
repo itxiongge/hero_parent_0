@@ -1,14 +1,21 @@
 package com.hero.goods.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.hero.goods.dao.BrandMapper;
+import com.hero.goods.dao.CategoryMapper;
+import com.hero.goods.dao.SkuMapper;
 import com.hero.goods.dao.SpuMapper;
+import com.hero.goods.pojo.*;
 import com.hero.goods.service.SpuService;
-import com.hero.goods.pojo.Spu;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.hero.util.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +24,81 @@ public class SpuServiceImpl implements SpuService {
 
     @Autowired
     private SpuMapper spuMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
+
+    @Autowired
+    private SkuMapper skuMapper;
+
+    @Autowired
+    private BrandMapper brandMapper;
+
+    @Autowired
+    private IdWorker idWorker;
+
+    /**
+     * 保存商品 SPU+SKU列表
+     * @param goods 商品组合实体类
+     */
+    @Transactional
+    @Override
+    public void add(Goods goods) {
+        //生成spuId
+        long spuId = idWorker.nextId();
+        //spuId放入SPU对象中
+        goods.getSpu().setId(String.valueOf(spuId));
+        //添加保存SPU数据
+        spuMapper.insertSelective(goods.getSpu());
+        //保存sku集合数据到数据库
+        saveSkuList(goods);
+    }
+
+    /**
+     * 保存sku列表
+     * @param goods
+     */
+    private void saveSkuList(Goods goods){
+        //获取spu对象
+        Spu spu = goods.getSpu();
+        //当前日期
+        Date date = new Date();
+        //获取品牌对象
+        Brand brand = brandMapper.selectByPrimaryKey(spu.getBrandId());
+        //获取分类对象
+        Category category = categoryMapper.selectByPrimaryKey(spu.getCategory3Id());
+        //获取sku集合对象
+        List<Sku> skuList = goods.getSkuList();
+        if (skuList != null) {
+            for (Sku sku : skuList) {
+                //设置sku主键ID
+                sku.setId(String.valueOf(idWorker.nextId()));
+                //设置sku规格
+                if (sku.getSpec() == null || "".equals(sku.getSpec())) {
+                    sku.setSpec("{}");
+                }
+                //设置sku名称(商品名称 + 规格)
+                String name = spu.getName();
+                //将规格json字符串转换成Map
+                Map<String, String> specMap = JSON.parseObject(sku.getSpec(), Map.class);
+                if (specMap != null && specMap.size() > 0) {
+                    for(String value : specMap.values()){
+                        name += " "+ value;
+                    }
+                }
+
+                sku.setName(name);//名称
+                sku.setSpuId(spu.getId());//设置spu的ID
+                sku.setCreateTime(date);//创建日期
+                sku.setUpdateTime(date);//修改日期
+                sku.setCategoryId(category.getId());//商品分类ID
+                sku.setCategoryName(category.getName());//商品分类名称
+                sku.setBrandName(brand.getName());//品牌名称
+                skuMapper.insertSelective(sku);//插入sku表数据
+            }
+        }
+    }
+
 
     /**
      * 查询全部列表

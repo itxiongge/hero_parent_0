@@ -2,6 +2,7 @@ package com.hero.goods.controller;
 import com.hero.entity.PageResult;
 import com.hero.entity.Result;
 import com.hero.entity.StatusCode;
+import com.hero.goods.pojo.Goods;
 import com.hero.goods.service.SpuService;
 import com.hero.goods.pojo.Spu;
 import com.github.pagehelper.Page;
@@ -17,6 +18,17 @@ public class SpuController {
 
     @Autowired
     private SpuService spuService;
+
+    /***
+     * 新增数据
+     * @param goods
+     * @return
+     */
+    @PostMapping
+    public Result add(@RequestBody Goods goods){
+        spuService.add(goods);
+        return new Result(true,StatusCode.OK,"添加成功");
+    }
 
     /**
      * 查询全部数据
