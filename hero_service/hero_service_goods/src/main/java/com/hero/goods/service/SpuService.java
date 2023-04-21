@@ -9,6 +9,13 @@ import java.util.Map;
 
 public interface SpuService {
 
+    /**
+     * 根据ID查询商品
+     * @param id
+     * @return
+     */
+    Goods findGoodsById(String id);
+
     /***
      * 新增
      * @param goods

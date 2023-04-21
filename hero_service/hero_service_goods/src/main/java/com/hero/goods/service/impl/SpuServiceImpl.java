@@ -38,6 +38,27 @@ public class SpuServiceImpl implements SpuService {
     private CategoryBrandMapper categoryBrandMapper;
 
     /**
+     * 根据ID查询商品
+     * @param id
+     * @return
+     */
+    public Goods findGoodsById(String id){
+        //查询spu
+        Spu spu = spuMapper.selectByPrimaryKey(id);
+
+        //查询SKU 列表
+        Example example=new Example(Sku.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("spuId",id);
+        List<Sku> skuList = skuMapper.selectByExample(example);
+
+        //封装，返回
+        Goods goods=new Goods();
+        goods.setSpu(spu);
+        goods.setSkuList(skuList);
+        return goods;
+    }
+    /**
      * 保存商品 SPU+SKU列表
      * @param goods 商品组合实体类
      */
@@ -80,7 +101,7 @@ public class SpuServiceImpl implements SpuService {
             //如果没有关系数据则添加品牌和分类关系数据
             categoryBrandMapper.insert(categoryBrand);
         }
-        
+
         //获取sku集合对象
         List<Sku> skuList = goods.getSkuList();
         if (skuList != null) {

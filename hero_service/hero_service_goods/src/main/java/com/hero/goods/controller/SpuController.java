@@ -18,7 +18,6 @@ public class SpuController {
 
     @Autowired
     private SpuService spuService;
-
     /***
      * 新增数据
      * @param goods
@@ -45,10 +44,15 @@ public class SpuController {
      * @param id
      * @return
      */
+//    @GetMapping("/{id}")
+//    public Result findById(@PathVariable String id){
+//        Spu spu = spuService.findById(id);
+//        return new Result(true,StatusCode.OK,"查询成功",spu);
+//    }
     @GetMapping("/{id}")
     public Result findById(@PathVariable String id){
-        Spu spu = spuService.findById(id);
-        return new Result(true,StatusCode.OK,"查询成功",spu);
+        Goods goods = spuService.findGoodsById(id);
+        return new Result(true,StatusCode.OK,"查询成功",goods);
     }
 
 
