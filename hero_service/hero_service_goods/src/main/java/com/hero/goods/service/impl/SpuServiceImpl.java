@@ -1,10 +1,7 @@
 package com.hero.goods.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.hero.goods.dao.BrandMapper;
-import com.hero.goods.dao.CategoryMapper;
-import com.hero.goods.dao.SkuMapper;
-import com.hero.goods.dao.SpuMapper;
+import com.hero.goods.dao.*;
 import com.hero.goods.pojo.*;
 import com.hero.goods.service.SpuService;
 import com.github.pagehelper.Page;
@@ -37,6 +34,9 @@ public class SpuServiceImpl implements SpuService {
     @Autowired
     private IdWorker idWorker;
 
+    @Autowired
+    private CategoryBrandMapper categoryBrandMapper;
+
     /**
      * 保存商品 SPU+SKU列表
      * @param goods 商品组合实体类
@@ -67,6 +67,20 @@ public class SpuServiceImpl implements SpuService {
         Brand brand = brandMapper.selectByPrimaryKey(spu.getBrandId());
         //获取分类对象
         Category category = categoryMapper.selectByPrimaryKey(spu.getCategory3Id());
+
+        /**
+         * 添加分类与品牌之间的关联
+         */
+        CategoryBrand categoryBrand = new CategoryBrand();
+        categoryBrand.setBrandId(spu.getBrandId());
+        categoryBrand.setCategoryId(spu.getCategory3Id());
+        int count = categoryBrandMapper.selectCount(categoryBrand);
+        //判断是否有这个品牌和分类的关系数据
+        if(count == 0) {
+            //如果没有关系数据则添加品牌和分类关系数据
+            categoryBrandMapper.insert(categoryBrand);
+        }
+        
         //获取sku集合对象
         List<Sku> skuList = goods.getSkuList();
         if (skuList != null) {
