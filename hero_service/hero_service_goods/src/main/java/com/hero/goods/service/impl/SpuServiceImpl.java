@@ -37,6 +37,22 @@ public class SpuServiceImpl implements SpuService {
     @Autowired
     private CategoryBrandMapper categoryBrandMapper;
 
+    //开启事务
+    @Transactional
+    @Override
+    public void update(Goods goods ) {
+        //取出spu部分
+        Spu spu = goods.getSpu();
+        spuMapper.updateByPrimaryKey(spu);
+        //删除原sku列表
+        Example example=new Example(Sku.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("spuId",spu.getId());
+        skuMapper.deleteByExample(example);
+
+        saveSkuList(goods);//保存sku列表
+    }
+
     /**
      * 根据ID查询商品
      * @param id

@@ -74,10 +74,22 @@ public class SpuController {
      * @param id
      * @return
      */
+//    @PutMapping(value="/{id}")
+//    public Result update(@RequestBody Spu spu,@PathVariable String id){
+//        spu.setId(id);
+//        spuService.update(spu);
+//        return new Result(true,StatusCode.OK,"修改成功");
+//    }
+    /***
+     * 修改数据
+     * @param goods
+     * @param id
+     * @return
+     */
     @PutMapping(value="/{id}")
-    public Result update(@RequestBody Spu spu,@PathVariable String id){
-        spu.setId(id);
-        spuService.update(spu);
+    public Result update(@RequestBody Goods goods,@PathVariable String id){
+        goods.getSpu().setId(id);
+        spuService.update(goods);
         return new Result(true,StatusCode.OK,"修改成功");
     }
 

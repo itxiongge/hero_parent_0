@@ -9,6 +9,12 @@ import java.util.Map;
 
 public interface SpuService {
 
+    /***
+     * 修改数据
+     * @param goods
+     */
+    void update(Goods goods);
+
     /**
      * 根据ID查询商品
      * @param id
