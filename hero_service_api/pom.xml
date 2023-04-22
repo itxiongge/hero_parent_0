@@ -18,6 +18,7 @@
         <module>hero_service_order_api</module>
         <module>hero_service_system_api</module>
         <module>hero_service_user_api</module>
+        <module>hero_service_search_api</module>
     </modules>
 
 

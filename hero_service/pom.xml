@@ -20,6 +20,7 @@
         <module>hero_service_system</module>
         <module>hero_service_user</module>
         <module>hero_service_file</module>
+        <module>hero_service_search</module>
     </modules>
 
 </project>

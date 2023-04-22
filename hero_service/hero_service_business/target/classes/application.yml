@@ -14,6 +14,10 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+  rabbitmq:
+    host: 192.168.200.128
+    username: guest
+    password: hero@202207
 feign:
   client:
     config:

@@ -1,0 +1,16 @@
+server:
+  port: 9009
+spring:
+  application:
+    name: search
+  rabbitmq:
+    host: 192.168.200.128
+    username: guest
+    password: hero@202207
+  redis:
+    host: 192.168.200.128
+  main:
+    allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
+  elasticsearch:
+    rest:
+      uris: http://192.168.200.128:9200

@@ -72,6 +72,7 @@ public class SpuServiceImpl implements SpuService {
             throw new RuntimeException("未通过审核的商品不能上架！");
         }
         spu.setIsMarketable("1");//上架状态
+        //TODO 发消息告知goods_up_exchange
         spuMapper.updateByPrimaryKeySelective(spu);
     }
     /**
@@ -81,6 +82,7 @@ public class SpuServiceImpl implements SpuService {
     public void pull(String id) {
         Spu spu = spuMapper.selectByPrimaryKey(id);
         spu.setIsMarketable("0");//下架状态
+        //TODO 发消息告知goods_down_exchange
         spuMapper.updateByPrimaryKeySelective(spu);
     }
     /**

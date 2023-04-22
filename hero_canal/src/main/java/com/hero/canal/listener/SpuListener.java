@@ -41,7 +41,7 @@ public class SpuListener {
 
         //is_marketable  由0改为1表示上架
         if("0".equals(oldMap.get("is_marketable")) && "1".equals(newMap.get("is_marketable")) ){
-            rabbitTemplate.convertAndSend("goods_update_exchange","",newMap.get("id")); //发送到mq商品上架交换器上
+            rabbitTemplate.convertAndSend("goods_up_exchange","",newMap.get("id")); //发送到mq商品上架交换器上
         }
     }
 }

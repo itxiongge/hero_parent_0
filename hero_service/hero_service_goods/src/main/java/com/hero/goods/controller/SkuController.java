@@ -7,6 +7,8 @@ import com.hero.goods.pojo.Sku;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 @RestController
@@ -17,6 +19,17 @@ public class SkuController {
 
     @Autowired
     private SkuService skuService;
+
+    /**
+     * 根据spuId查询sku列表
+     */
+    @GetMapping(value = "/findBySpuId/{spuId}" )
+    public List<Sku> findBySpuId(@PathVariable String spuId){
+        Map<String, Object> searchMap = new HashMap<>();
+        searchMap.put("spuId",spuId);
+        List<Sku> list = skuService.findList(searchMap);
+        return list;
+    }
 
     /**
      * 查询全部数据
