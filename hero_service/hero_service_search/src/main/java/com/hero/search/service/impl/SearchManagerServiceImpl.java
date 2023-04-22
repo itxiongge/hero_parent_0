@@ -1,6 +1,7 @@
 package com.hero.search.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.hero.entity.Result;
 import com.hero.goods.feign.SkuFeign;
 import com.hero.goods.pojo.Sku;
 import com.hero.pojo.SkuInfo;
@@ -9,6 +10,8 @@ import com.hero.search.service.SearchManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +26,30 @@ public class SearchManagerServiceImpl implements SearchManagerService {
 
     @Autowired
     private SearchMapper searchMapper;
+
+    /**
+     * 导入全部数据到ES索引库
+     */
+    @Override
+    public void importAll() {
+        Map paramMap = new HashMap();
+        paramMap.put("status", "1");
+        Result result = skuFeign.findList(paramMap);
+        List<SkuInfo> skuInfos = JSON.parseArray(JSON.toJSONString(result.getData()), SkuInfo.class);
+        for (SkuInfo skuInfo : skuInfos) {
+            skuInfo.setPrice(skuInfo.getPrice());
+            skuInfo.setSpecMap(JSON.parseObject(skuInfo.getSpec(), Map.class));
+        }
+        List<SkuInfo> tmp = new ArrayList<>();
+        int i = 0;
+        for (SkuInfo skuInfo : skuInfos) {
+            tmp.add(skuInfo);
+            if (i % 10000 == 0) {
+                searchMapper.saveAll(tmp);
+                tmp = new ArrayList<>();
+            }
+        }
+    }
 
     @Override
     public void importBySpuId(String spuId) {

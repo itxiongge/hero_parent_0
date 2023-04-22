@@ -6,4 +6,9 @@ public interface SearchManagerService {
      * @param spuId
      */
     void importBySpuId(String spuId);
+
+    /**
+     * 全量同步商品信息
+     */
+    void importAll();
 }
